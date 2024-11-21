@@ -1,0 +1,68 @@
+import csv
+from datetime import datetime
+
+# Subject map
+subject_map = {
+    "subject1_marks": "Mathematics",
+    "subject2_marks": "Science", 
+    "subject3_marks": "English",
+    "subject4_marks": "Social Studies",
+    "subject5_marks": "Hindi",
+    "subject6_marks": "Computer Science",
+    "subject7_marks": "Physical Education",
+    "subject8_marks": "Art",
+    "subject9_marks": "Music",
+    "subject10_marks": "Environmental Studies",
+    "subject11_marks": "Geography",
+    "subject12_marks": "History",
+    "subject13_marks": "Civics",
+    "subject14_marks": "Economics",
+    "subject15_marks": "Sanskrit"
+}
+
+# Input and output file paths
+input_file = 'input.csv'
+output_file = 'output.csv'
+
+# Define fixed values for the new columns
+test_name = "Monthly Test"
+test_date = "2024-11-04"
+attendance = "TRUE"  # Assuming all are present
+max_marks = 15  # Change based on your test maximum marks
+
+# Process the input CSV
+with open(input_file, mode='r') as infile, open(output_file, mode='w', newline='') as outfile:
+    reader = csv.DictReader(infile)
+    fieldnames = [
+        "admission_number", "test_name", "test_date", "attendance",
+        "subject1_marks", "subject2_marks", "subject3_marks", "subject4_marks",
+        "subject5_marks", "subject6_marks", "subject7_marks", "subject8_marks",
+        "subject9_marks", "subject10_marks", "subject11_marks", "subject12_marks",
+        "subject13_marks", "subject14_marks", "subject15_marks",
+        "max_marks", "teachers_note"
+    ]
+    writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+    writer.writeheader()
+
+    for row in reader:
+        # Prepare the output row
+        output_row = {
+            "admission_number": row["Admission Number"],
+            "test_name": test_name,
+            "test_date": test_date,
+            "attendance": attendance,
+            "max_marks": max_marks,
+            "teachers_note": row.get("Teacher Notes", "")
+        }
+        
+        # Initialize all subject marks to empty
+        for i in range(1, 16):
+            output_row[f"subject{i}_marks"] = ""
+
+        # Fill in Mathematics marks
+        output_row["subject1_marks"] = row.get("Mathematics", "")
+
+        # Write the transformed row
+        writer.writerow(output_row)
+
+print("CSV conversion completed successfully.")
